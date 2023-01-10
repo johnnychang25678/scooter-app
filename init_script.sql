@@ -1,0 +1,6 @@
+CREATE TABLE my_db.test (
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    age INTEGER NOT NULL,
+    PRIMARY KEY (id)
+);
