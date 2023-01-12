@@ -14,7 +14,7 @@ export class ScooterService {
 
   private readonly logger = new Logger(ScooterService.name);
 
-  findOne(query: getUser) {
+  findByQuery(query: getUser) {
     const {
       id,
       brand,
@@ -43,7 +43,7 @@ export class ScooterService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      where.mileage = Between(mileageLt, mileageGt);
+      where.mileage = Between(mileageGt, mileageLt);
     }
     return this.scooterRepo.find({ where });
   }
@@ -65,14 +65,14 @@ export class ScooterService {
   async update(id: number, dto: CreateScooterDto) {
     const scooterToUpdate = await this.scooterRepo.findOneBy({ id });
     if (scooterToUpdate == null) {
-      console.log(scooterToUpdate);
-    } else {
-      const { brand, plate, mileage, productionDate } = dto;
-      scooterToUpdate.brand = brand;
-      scooterToUpdate.plate = plate;
-      scooterToUpdate.mileage = mileage;
-      scooterToUpdate.productionDate = productionDate;
-      return this.scooterRepo.save(scooterToUpdate);
+      throw new HttpException('id does not exist', HttpStatus.BAD_REQUEST);
     }
+
+    const { brand, plate, mileage, productionDate } = dto;
+    scooterToUpdate.brand = brand;
+    scooterToUpdate.plate = plate;
+    scooterToUpdate.mileage = mileage;
+    scooterToUpdate.productionDate = productionDate;
+    return this.scooterRepo.save(scooterToUpdate);
   }
 }

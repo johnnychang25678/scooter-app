@@ -9,7 +9,7 @@ export class ScooterController {
   constructor(private readonly scooterService: ScooterService) {}
   @Get()
   async get(@Query() query: getUser) {
-    const result = await this.scooterService.findOne(query);
+    const result = await this.scooterService.findByQuery(query);
     return apiResponse(result);
   }
   @Get()
