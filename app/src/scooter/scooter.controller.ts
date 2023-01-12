@@ -1,15 +1,5 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
-import { ApiOperation, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateScooterDto } from './dto/create-scooter.dto';
 import { GetScooterQueryDto } from './dto/get-scooter-query.dto';
 import { ResponseDto } from './dto/response.dto';
