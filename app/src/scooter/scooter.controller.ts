@@ -26,7 +26,6 @@ export class ScooterController {
   })
   @Get()
   async get(@Query() query: GetScooterQueryDto) {
-    console.log(query);
     const result = await this.scooterService.findByQuery(query);
     return apiResponse(result);
   }
