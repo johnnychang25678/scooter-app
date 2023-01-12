@@ -2,7 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('scooters')
@@ -13,6 +15,7 @@ export class Scooter {
   @Column()
   brand: string;
 
+  @Index({ unique: true })
   @Column()
   plate: string;
 
@@ -25,6 +28,6 @@ export class Scooter {
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @CreateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
