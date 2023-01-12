@@ -12,8 +12,6 @@ export class ScooterService {
     private scooterRepo: Repository<Scooter>,
   ) {}
 
-  private readonly logger = new Logger(ScooterService.name);
-
   findByQuery(query: GetScooterQueryDto) {
     const {
       id,

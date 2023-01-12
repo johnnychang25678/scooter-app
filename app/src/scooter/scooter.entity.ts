@@ -22,7 +22,7 @@ export class Scooter {
   @Column()
   mileage: number;
 
-  @CreateDateColumn({ name: 'production_date' })
+  @Column({ name: 'production_date' })
   productionDate: Date;
 
   @CreateDateColumn({ name: 'created_at' })
