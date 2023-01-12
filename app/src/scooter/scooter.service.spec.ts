@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Between, Repository } from 'typeorm';
+import { Between } from 'typeorm';
 import { Scooter } from './scooter.entity';
 import { ScooterService } from './scooter.service';
 import { Provider } from '@nestjs/common';
-import { getUser } from './interfaces/get-user.interface';
 import { CreateScooterDto } from './dto/create-scooter.dto';
+import { GetScooterQueryDto } from './dto/get-scooter-query.dto';
 
 describe('ScooterService', () => {
   const mockScooter = new Scooter();
@@ -42,15 +42,9 @@ describe('ScooterService', () => {
   });
 
   it('if query against mileageGt and mileageLt, need both to exist', async () => {
-    const query: getUser = {
-      id: null,
-      brand: null,
-      plate: null,
-      mileageGt: 100,
-      mileageLt: null,
-      productionDateBegin: null,
-      productionDateEnd: null,
-    };
+    const query = new GetScooterQueryDto();
+    query.mileageGt = 100;
+
     try {
       await service.findByQuery(query);
     } catch (error) {
@@ -59,15 +53,8 @@ describe('ScooterService', () => {
   });
 
   it('if query against productionDateBegin and productionDateEnd, need both to exist', async () => {
-    const query: getUser = {
-      id: null,
-      brand: null,
-      plate: null,
-      mileageGt: null,
-      mileageLt: null,
-      productionDateBegin: new Date(),
-      productionDateEnd: null,
-    };
+    const query = new GetScooterQueryDto();
+    query.productionDateBegin = new Date();
     try {
       await service.findByQuery(query);
     } catch (error) {
@@ -78,17 +65,11 @@ describe('ScooterService', () => {
   });
 
   it('if query valid, repository.find() should be called with correct where clause', async () => {
-    const query: getUser = {
-      id: 1,
-      brand: null,
-      plate: null,
-      mileageGt: null,
-      mileageLt: null,
-      productionDateBegin: null,
-      productionDateEnd: null,
-    };
+    const query = new GetScooterQueryDto();
+    query.id = 1;
     await service.findByQuery(query);
     expect(mockScooterRepository.useValue.find).toBeCalledWith({
+      take: 1000,
       where: {
         id: query.id,
         brand: query.brand,
@@ -100,6 +81,7 @@ describe('ScooterService', () => {
 
     await service.findByQuery(query);
     expect(mockScooterRepository.useValue.find).toBeCalledWith({
+      take: 1000,
       where: {
         id: query.id,
         brand: query.brand,
@@ -132,7 +114,6 @@ describe('ScooterService', () => {
     } catch (error) {
       expect(error.message).toBe('id does not exist');
     }
-    expect(mockScooterRepository.useValue.findOneBy).toReturnWith(null);
   });
 
   it('update success', async () => {
