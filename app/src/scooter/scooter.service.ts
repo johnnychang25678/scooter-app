@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { CreateScooterDto } from './dto/create-scooter.dto';
-import { getUser } from './interfaces/get-user.interface';
+import { GetScooterQueryDto } from './dto/get-scooter-query.dto';
 import { Scooter } from './scooter.entity';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class ScooterService {
 
   private readonly logger = new Logger(ScooterService.name);
 
-  findByQuery(query: getUser) {
+  findByQuery(query: GetScooterQueryDto) {
     const {
       id,
       brand,
@@ -23,6 +23,7 @@ export class ScooterService {
       mileageLt,
       productionDateBegin,
       productionDateEnd,
+      limit,
     } = query;
     const where: any = { id, brand, plate };
 
@@ -45,11 +46,7 @@ export class ScooterService {
       }
       where.mileage = Between(mileageGt, mileageLt);
     }
-    return this.scooterRepo.find({ where });
-  }
-
-  findAll() {
-    return this.scooterRepo.find();
+    return this.scooterRepo.find({ where, take: limit ?? 1000 });
   }
 
   async create(createScooterDto: CreateScooterDto) {

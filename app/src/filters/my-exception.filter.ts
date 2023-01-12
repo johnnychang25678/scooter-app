@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Logger,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
 
@@ -68,7 +69,14 @@ export class MyExceptionFilter implements ExceptionFilter {
       case QueryFailedError:
         errResponse = MyExceptionResponse.queryFailed;
         break;
-
+      case BadRequestException:
+        errResponse = MyExceptionResponse.genHttpExceptionResponse(
+          (exception as BadRequestException).getStatus(),
+          (exception as BadRequestException)['response']
+            ? (exception as BadRequestException)['response']['message']
+            : (exception as BadRequestException).message,
+        );
+        break;
       default:
         break;
     }
